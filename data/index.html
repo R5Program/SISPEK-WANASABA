@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SISPEK - Desa Wanasaba</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+         :root {
+            --primary-color: #1e3799;
+            --accent-color: #4a69bd;
+            --bg-color: #f1f2f6;
+        }
+        
+        body {
+            background: var(--bg-color);
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            margin: 0;
+        }
+        /* LAYOUT UTAMA */
+        
+        .main-container {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+            position: relative;
+        }
+        
+        .left-panel {
+            flex: 0 0 450px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+            z-index: 20;
+            border-right: 1px solid #dcdde1;
+        }
+        
+        .app-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            border-bottom: 5px solid #f6b93b;
+            flex-shrink: 0;
+        }
+        
+        .app-title {
+            font-weight: 900;
+            font-size: 1.5rem;
+            margin: 0;
+            line-height: 1;
+        }
+        
+        .app-subtitle {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.9);
+            display: block;
+            margin-top: 5px;
+            border-left: 3px solid #f6b93b;
+            padding-left: 10px;
+        }
+        
+        .scroll-area {
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 120px !important;
+            flex: 1;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .section-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #7f8fa6;
+            font-weight: 700;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        
+        .form-control,
+        .form-select {
+            border: 1px solid #dcdde1;
+            background-color: #fcfcfc;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(74, 105, 189, 0.1);
+            background-color: white;
+        }
+        
+        label {
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-bottom: 2px;
+            color: #2f3640;
+            margin-top: 6px;
+        }
+        /* FORM FIELD DINAMIS */
+        
+        .f1-only-group,
+        .surat-only-group,
+        .dynamic-field {
+            display: none;
+        }
+        
+        .active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        .dynamic-field {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #90caf9;
+            margin-bottom: 10px;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .btn-custom-secondary {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            padding: 15px;
+            font-weight: 600;
+            width: 100%;
+            font-size: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .right-panel {
+            flex: 1;
+            background: #718093;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .zoom-toolbar {
+            background: #2f3640;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            color: white;
+            font-size: 0.8rem;
+            z-index: 10;
+            flex-shrink: 0;
+        }
+        
+        .preview-container {
+            flex: 1;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px;
+            background: #57606f;
+        }
+        /* MOBILE NAVBAR */
+        
+        .mobile-navbar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            border-top: 1px solid #ddd;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            justify-content: space-around;
+            align-items: center;
+            height: 65px;
+            padding-bottom: 5px;
+        }
+        
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 8px 0;
+            color: #95a5a6;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .left-panel,
+            .right-panel {
+                width: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 65px;
+                border-right: none;
+                display: none;
+            }
+            .left-panel.active-view,
+            .right-panel.active-view {
+                display: flex;
+                z-index: 20;
+            }
+            .mobile-navbar {
+                display: flex;
+            }
+            .app-title {
+                font-size: 1.3rem;
+            }
+            .preview-container {
+                padding: 10px;
+                background: #b2bec3;
+            }
+        }
+        /* KERTAS & PRINT */
+        
+        .paper-base {
+            background: white;
+            padding: 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform-origin: top center;
+            transition: transform 0.2s;
+        }
+        
+        .size-f4-land {
+            width: 330mm;
+            min-height: 215mm;
+            padding: 5mm;
+        }
+        
+        .size-a4 {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm 25mm;
+            font-family: 'Times New Roman', serif;
+            line-height: 1.5;
+            color: #000;
+            font-size: 12pt;
+        }
+        /* STYLE SURAT UMUM */
+        
+        .surat-layout {
+            display: none;
+        }
+        
+        .kop-surat {
+            text-align: center;
+            border-bottom: 3px double #000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .kop-surat img {
+            width: 63px;
+            position: absolute;
+            left: 10px;
+            top: 5px;
+        }
+        
+        .kop-surat h3 {
+            font-size: 14pt;
+            font-weight: bold;
+            margin: 0;
+            text-transform: uppercase;
+            font-family: 'Times New Roman', serif;
+        }
+        
+        .kop-surat h2 {
+            font-size: 18pt;
+            font-weight: 800;
+            margin: 0;
+            text-transform: uppercase;
+            font-family: 'Times New Roman', serif;
+        }
+        
+        .kop-surat p {
+            font-size: 8pt;
+            font-style: italic;
+            margin: 0;
+            font-family: 'Times New Roman', serif;
+        }
+        
+        .judul-surat {
+            text-align: center;
+            font-weight: bold;
+            text-decoration: underline;
+            font-size: 12pt;
+            margin-top: 20px;
+            text-transform: uppercase;
+        }
+        
+        .nomor-surat {
+            text-align: center;
+            margin-top: 2px;
+            margin-bottom: 20px;
+            font-size: 12pt;
+        }
+        
+        .identitas-table {
+            width: 100%;
+            margin-bottom: 5px;
+            font-size: 12pt;
+            border-collapse: collapse;
+        }
+        
+        .identitas-table td {
+            padding: 1px 0;
+            vertical-align: top;
+        }
+        
+        .ttd-area {
+            float: right;
+            width: 250px;
+            text-align: center;
+            margin-top: 40px;
+            font-size: 12pt;
+            margin-right: 20px;
+            page-break-inside: avoid;
+        }
+        
+        .paragraf {
+            text-align: justify;
+            text-indent: 40px;
+            margin-bottom: 10px;
+        }
+        /* F-1.01 STYLES (Tetap dipertahankan) */
+        
+        .f1-layout {
+            width: 100%;
+            border: 1px solid #000;
+            padding: 2px;
+            box-sizing: border-box;
+            font-size: 8pt;
+            font-family: Arial, sans-serif;
+        }
+        
+        .kotak-row {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+        }
+        
+        .k-char {
+            width: 14px;
+            height: 16px;
+            border: 1px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9pt;
+            font-weight: bold;
+            background: white;
+        }
+        
+        .k-long {
+            flex: 1;
+            border: 1px solid #000;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            padding-left: 5px;
+            font-weight: bold;
+            font-size: 9pt;
+        }
+        
+        .f1-header-top {
+            position: relative;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        
+        .f1-logo {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 50px;
+        }
+        
+        .f1-code-top {
+            position: absolute;
+            right: 0;
+            top: 0;
+            border: 2px solid #000;
+            padding: 2px 8px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        .f1-grid-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .f1-col-left {
+            flex: 1.5;
+        }
+        
+        .f1-col-right {
+            flex: 1;
+            border-left: 1px solid #000;
+            padding-left: 5px;
+        }
+        
+        .f1-form-row {
+            display: flex;
+            margin-bottom: 3px;
+            align-items: center;
+        }
+        
+        .f1-label {
+            width: 110px;
+            font-size: 8pt;
+        }
+        
+        .f1-input-area {
+            flex: 1;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        
+        .f1-table-section {
+            margin-top: 5px;
+            border: 1px solid #000;
+            margin-bottom: 10px;
+        }
+        
+        .f1-tbl {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 7pt;
+            table-layout: fixed;
+        }
+        
+        .f1-tbl th,
+        .f1-tbl td {
+            border: 1px solid #000;
+            padding: 1px;
+            text-align: center;
+            vertical-align: middle;
+            overflow: hidden;
+            white-space: nowrap;
+            height: 18px;
+        }
+        
+        .f1-tbl th {
+            background: #eee;
+            font-weight: bold;
+            height: 25px;
+        }
+        
+        @media print {
+            @page {
+                margin: 0;
+                size: auto;
+            }
+            html,
+            body {
+                height: 100%;
+                overflow: hidden;
+                background: white;
+            }
+            .left-panel,
+            .zoom-toolbar,
+            .mobile-navbar,
+            .app-header {
+                display: none !important;
+            }
+            .right-panel {
+                display: block !important;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow: visible;
+                background: white;
+            }
+            .preview-container {
+                padding: 0;
+                margin: 0;
+                display: block;
+            }
+            .paper-base {
+                box-shadow: none;
+                margin: 0;
+                width: 100% !important;
+                page-break-inside: avoid;
+            }
+            .size-f4-land {
+                padding: 5mm !important;
+                transform: scale(0.90) !important;
+                transform-origin: top left;
+                width: 105% !important;
+            }
+            .size-a4 {
+                padding: 15mm 20mm !important;
+                transform: scale(1.0) !important;
+                width: 210mm !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="mobile-navbar">
+        <div class="nav-item active" onclick="switchView('input')" id="navInput"><i class="fa-solid fa-pen-to-square"></i><span>Input Data</span></div>
+        <div class="nav-item" onclick="switchView('preview')" id="navPreview"><i class="fa-solid fa-eye"></i><span>Preview</span></div>
+    </div>
+
+    <div class="main-container">
+        <div class="left-panel active-view" id="panelInput">
+            <div class="app-header">
+                <div class="d-flex align-items-center gap-3">
+                    <div style="font-size: 2rem;">🏛️</div>
+                    <div>
+                        <h1 class="app-title">SISPEK</h1><span class="app-subtitle">Sistem Pelayanan Administrasi Kependudukan</span>
+                        <span class="app-subtitle"> Desa Wanasaba</span></div>
+                </div>
+            </div>
+
+            <div class="scroll-area">
+                <h6 class="section-title">📝 Pilih Dokumen</h6>
+                <div class="mb-3">
+                    <select id="inputJenis" class="form-select border-primary fw-bold" style="padding:12px;">
+                    <optgroup label="Formulir Khusus">
+                        <option value="F-1.01">F-1.01 BIODATA PENDUDUK (WNI)</option>
+                    </optgroup>
+                    <optgroup label="Surat Keterangan">
+                        <option value="anak_kandung">Ket. Anak Kandung</option> 
+                        <option value="saudara_kandung">Ket. Saudara Kandung</option>
+                        <option value="sktm">Ket. Tidak Mampu (SKTM)</option>
+                        <option value="beda_tgl">Ket. Beda Tanggal Lahir</option>
+                        <option value="harga">Ket. Harga Tanah</option>
+                        <option value="beda_nama">Ket. Beda Nama</option>
+                        <option value="luar_negeri">Ket. Luar Negeri</option>
+                        <option value="belum_nikah">Ket. Belum Nikah</option>
+                        <option value="bepergian">Ket. Bepergian</option>
+                        <option value="usaha">Izin Usaha / HO</option>
+                        <option value="domisili">Ket. Domisili (Umum)</option>
+                        <option value="izin_istri">Surat Izin Istri</option>
+                    </optgroup>
+                </select>
+                </div>
+
+                <div id="form-surat-biasa" class="surat-only-group">
+                    <h6 class="section-title text-warning">👤 Data Surat & Penduduk</h6>
+                    <div class="row g-2 mb-2">
+                        <div class="col-5"><label>Nomor Surat</label><input type="text" id="sb_no" class="form-control" value="474.4/ ... /Pem./2025"></div>
+                        <div class="col-7"><label>NIK</label><input type="text" id="sb_nik" class="form-control"></div>
+                    </div>
+                    <div class="mb-2"><label>Nama Lengkap</label><input type="text" id="sb_nama" class="form-control"></div>
+                    <div class="mb-2"><label>Tempat, Tgl Lahir</label><input type="text" id="sb_ttl" class="form-control" placeholder="Wanasaba, 01-01-1990"></div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><label>Jenis Kelamin</label><select id="sb_jk" class="form-select"><option>Laki-laki</option><option>Perempuan</option></select></div>
+                        <div class="col-6"><label>Agama</label><select id="sb_agama" class="form-select"><option>Islam</option><option>Hindu</option></select></div>
+                    </div>
+                    <div class="mb-2"><label>Pekerjaan</label><input type="text" id="sb_pekerjaan" class="form-control"></div>
+                    <div class="mb-2"><label>Alamat</label><textarea id="sb_alamat" class="form-control" rows="2"></textarea></div>
+
+                    <div id="field-harga" class="dynamic-field">
+                        <label class="text-primary fw-bold mb-1">💰 Data Tanah</label>
+                        <input type="text" id="in_lokasi_tanah" class="form-control mb-1" placeholder="Lokasi (Dusun)">
+                        <input type="text" id="in_sertifikat" class="form-control mb-1" placeholder="No. Sertifikat">
+                        <input type="text" id="in_luas" class="form-control mb-1" placeholder="Luas (M2)">
+                        <input type="text" id="in_harga" class="form-control mb-1" placeholder="Harga (Angka)">
+                        <input type="text" id="in_terbilang" class="form-control" placeholder="Harga (Terbilang)">
+                    </div>
+
+                    <div id="field-beda_nama" class="dynamic-field">
+                        <label class="text-danger fw-bold mb-1">≠ Data Perbedaan</label>
+                        <input type="text" id="in_nama_salah" class="form-control mb-1" placeholder="Nama yg Salah">
+                        <input type="text" id="in_dokumen" class="form-control" placeholder="Terdapat pada Dokumen (Ijazah/KK)">
+                    </div>
+
+                    <div id="field-beda_tgl" class="dynamic-field">
+                        <label class="text-danger fw-bold mb-1">📅 Beda Tanggal Lahir</label>
+                        <input type="text" id="in_bt_dokumen" class="form-control mb-1" placeholder="Nama Dokumen Salah (Cth: Ijazah)">
+                        <input type="text" id="in_bt_nomor" class="form-control mb-1" placeholder="Nomor Dokumen">
+                        <input type="text" id="in_bt_penerbit" class="form-control mb-1" placeholder="Diterbitkan Oleh (Instansi)">
+                        <label style="font-size:0.7rem; color:#666;">Data Tertulis (Salah):</label>
+                        <input type="text" id="in_bt_tertulis" class="form-control mb-1" placeholder="Cth: 10 Juni 1983">
+                        <label style="font-size:0.7rem; color:#666;">Data Sebenarnya (Benar):</label>
+                        <input type="text" id="in_bt_benar" class="form-control" placeholder="Cth: Wanasaba, 10 Juni 1984">
+                    </div>
+
+                    <div id="field-tujuan" class="dynamic-field">
+                        <label class="text-success fw-bold mb-1">✈️ Tujuan</label>
+                        <input type="text" id="in_negara" class="form-control mb-1" placeholder="Negara/Tujuan">
+                        <input type="text" id="in_alasan" class="form-control" placeholder="Alasan (Khusus Bepergian)">
+                    </div>
+
+                    <div id="field-keluarga" class="dynamic-field">
+                        <label class="text-info fw-bold mb-1">👨‍👩‍👧‍👦 Keterangan Hubungan (Detail)</label>
+                        <label style="font-size:0.7rem; color:#666;">Bagian ini melengkapi: "ANAK/SAUDARA KANDUNG ..."</label>
+                        <textarea id="in_ket_hubungan_detail" class="form-control" rows="3" placeholder="Contoh: dari Pasangan Suami Istri..."></textarea>
+                        <div id="helper-btn-group" class="mt-2 d-flex gap-1">
+                            <button class="btn btn-sm btn-outline-primary" onclick="setHubungan('anak')">Template Anak</button>
+                            <button class="btn btn-sm btn-outline-primary" onclick="setHubungan('saudara')">Template Saudara</button>
+                        </div>
+                    </div>
+
+                    <div id="field-usaha" class="dynamic-field">
+                        <label class="text-warning fw-bold mb-1">🏪 Data Usaha</label>
+                        <input type="text" id="in_nama_usaha" class="form-control mb-1" placeholder="Nama Usaha">
+                        <input type="text" id="in_jenis_usaha" class="form-control" placeholder="Jenis Usaha">
+                    </div>
+
+                    <div id="field-sktm" class="dynamic-field">
+                        <label class="text-danger fw-bold mb-1">🆘 Data SKTM</label>
+                        <input type="text" id="in_sktm_tujuan" class="form-control mb-1" placeholder="Keperluan (Cth: Biaya Sekolah)">
+                        <input type="text" id="in_sktm_nama_anak" class="form-control" placeholder="Nama Anak/Pasien (Jika ada)">
+                    </div>
+
+                    <!-- Field untuk Surat Izin Istri -->
+                    <div id="field-izin_istri" class="dynamic-field">
+                        <label class="text-primary fw-bold mb-1">👰 Data Suami</label>
+                        <input type="text" id="in_nama_suami" class="form-control mb-1" placeholder="Nama Suami Lengkap">
+                        <input type="text" id="in_ttl_suami" class="form-control mb-1" placeholder="Tempat/Tgl Lahir Suami">
+                        <input type="text" id="in_pekerjaan_suami" class="form-control mb-1" placeholder="Pekerjaan Suami">
+                        <input type="text" id="in_alamat_suami" class="form-control mb-1" placeholder="Alamat Suami">
+
+                        <label class="text-success fw-bold mt-2 mb-1">💼 Data Pekerjaan</label>
+                        <input type="text" id="in_perusahaan" class="form-control mb-1" placeholder="Nama Perusahaan (PT)">
+                        <input type="text" id="in_tujuan_negara" class="form-control mb-1" placeholder="Negara Tujuan">
+                        <input type="text" id="in_masa_kontrak" class="form-control" placeholder="Masa Kontrak (Contoh: 2 Tahun)">
+                    </div>
+
+                    <div class="mb-2 border-top pt-2"><label>Pejabat Penanda Tangan</label><input type="text" id="sb_ttd" class="form-control" value="H. MISNUN, SH."></div>
+                    <div class="mb-2"><label>Jabatan Penanda Tangan</label><input type="text" id="sb_jabatan" class="form-control" value="Kepala Desa Wanasaba Kecamatan Wanasaba Kabupaten Lombok Timur Nusa Tenggara Barat."></div>
+                </div>
+
+                <div id="form-f1-01" class="f1-only-group">
+                    <h6 class="section-title text-primary">📋 Data Formulir F-1.01</h6>
+                    <div class="mb-2 border-bottom pb-2"><label>Nama Kepala Keluarga (KK)</label><input type="text" id="f1_nama_kk" class="form-control fw-bold"></div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><label>Alamat</label><input type="text" id="f1_alamat" class="form-control"></div>
+                        <div class="col-3"><label>RT</label><input type="text" id="f1_rt" class="form-control text-center" placeholder="000"></div>
+                        <div class="col-3"><label>RW</label><input type="text" id="f1_rw" class="form-control text-center" placeholder="000"></div>
+                    </div>
+                    <label class="mt-2 text-primary">Data Anggota Keluarga:</label>
+                    <div class="mb-2"><input type="text" id="f1_nama" class="form-control" placeholder="Nama Lengkap"></div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><input type="text" id="f1_nik" class="form-control" placeholder="NIK"></div>
+                        <div class="col-6"><input type="text" id="f1_tmp_lahir" class="form-control" placeholder="Tempat Lahir"></div>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><label>Tgl Lahir</label><input type="date" id="f1_tgl_lahir" class="form-control"></div>
+                        <div class="col-3"><label>JK (1/2)</label><input type="text" id="f1_jk" class="form-control text-center" value="1"></div>
+                        <div class="col-3"><label>Gol</label><input type="text" id="f1_gol" class="form-control text-center" value="13"></div>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-4"><label>Agm</label><input type="text" id="f1_agama" class="form-control text-center" value="1"></div>
+                        <div class="col-4"><label>Sts</label><input type="text" id="f1_kawin" class="form-control text-center" value="1"></div>
+                        <div class="col-4"><label>Pkrj</label><input type="text" id="f1_kerja" class="form-control text-center" value="88"></div>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><label>Nama Ibu</label><input type="text" id="f1_ibu" class="form-control"></div>
+                        <div class="col-6"><label>Nama Ayah</label><input type="text" id="f1_ayah" class="form-control"></div>
+                    </div>
+                </div>
+
+                <button type="button" id="btnCetak" class="btn-custom-secondary" onclick="handlePrint()">🖨️ Cetak Surat</button>
+            </div>
+        </div>
+
+        <div class="right-panel hidden-view" id="panelPreview">
+            <div class="zoom-toolbar"><span>🔍 Zoom:</span><input type="range" class="zoom-range" min="0.3" max="1.5" step="0.1" value="0.8" id="zoomSlider" oninput="updateZoom(this.value)"></div>
+            <div class="preview-container">
+                <div id="paperPreview" class="paper-base size-a4">
+
+                    <div id="layout-f1" class="f1-layout">
+                        <div class="f1-header-top"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Garuda_Pancasila.svg/1200px-Garuda_Pancasila.svg.png" class="f1-logo">
+                            <div class="f1-h-text">
+                                <h2>PEMERINTAH KABUPATEN LOMBOK TIMUR</h2>
+                                <h1>FORMULIR BIODATA PENDUDUK WARGA NEGARA INDONESIA</h1>
+                            </div>
+                            <div class="f1-code-top">F-1.01</div>
+                        </div>
+                        <div class="f1-grid-container">
+                            <div class="f1-col-left">
+                                <div class="f1-form-row">
+                                    <div class="f1-label">Nama Kepala Keluarga</div>
+                                    <div class="f1-input-area" style="margin-right: 5px;">:</div>
+                                    <div class="f1-input-area" id="boxNamaKK"></div>
+                                </div>
+                                <div class="f1-form-row">
+                                    <div class="f1-label">Alamat</div>
+                                    <div class="f1-input-area" style="margin-right: 5px;">:</div>
+                                    <div class="f1-input-area" id="boxAlamat"></div>
+                                </div>
+                                <div class="f1-form-row">
+                                    <div class="f1-label">Kode Pos</div>
+                                    <div class="f1-input-area" style="margin-right: 5px;">:</div>
+                                    <div class="f1-input-area">
+                                        <div class="kotak-row">
+                                            <div class="k-char">8</div>
+                                            <div class="k-char">3</div>
+                                            <div class="k-char">6</div>
+                                            <div class="k-char">5</div>
+                                            <div class="k-char">3</div>
+                                        </div><span style="margin:0 5px;">RT</span>
+                                        <div class="kotak-row" id="boxRT"></div><span style="margin:0 5px;">RW</span>
+                                        <div class="kotak-row" id="boxRW"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="f1-col-right">
+                                <div class="f1-form-row">
+                                    <div class="f1-label" style="width:90px;">Kode-Nama Propinsi</div>
+                                    <div>:</div>
+                                    <div class="f1-input-area" style="margin-left:3px;">
+                                        <div class="kotak-row">
+                                            <div class="k-char">5</div>
+                                            <div class="k-char">2</div>
+                                        </div>
+                                        <div class="k-long">NUSA TENGGARA BARAT</div>
+                                    </div>
+                                </div>
+                                <div class="f1-form-row">
+                                    <div class="f1-label" style="width:90px;">Kode-Nama Kab/Kota</div>
+                                    <div>:</div>
+                                    <div class="f1-input-area" style="margin-left:3px;">
+                                        <div class="kotak-row">
+                                            <div class="k-char">0</div>
+                                            <div class="k-char">3</div>
+                                        </div>
+                                        <div class="k-long">LOMBOK TIMUR</div>
+                                    </div>
+                                </div>
+                                <div class="f1-form-row">
+                                    <div class="f1-label" style="width:90px;">Kode-Nama Kec.</div>
+                                    <div>:</div>
+                                    <div class="f1-input-area" style="margin-left:3px;">
+                                        <div class="kotak-row">
+                                            <div class="k-char"> </div>
+                                            <div class="k-char"> </div>
+                                        </div>
+                                        <div class="k-long">WANASABA</div>
+                                    </div>
+                                </div>
+                                <div class="f1-form-row">
+                                    <div class="f1-label" style="width:90px;">Kode-Nama Desa</div>
+                                    <div>:</div>
+                                    <div class="f1-input-area" style="margin-left:3px;">
+                                        <div class="kotak-row">
+                                            <div class="k-char"> </div>
+                                            <div class="k-char"> </div>
+                                        </div>
+                                        <div class="k-long">WANASABA</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="font-weight:bold; font-size:8pt; margin-bottom:2px;">DATA KELUARGA</div>
+                        <div class="f1-table-section">
+                            <table class="f1-tbl">
+                                <thead>
+                                    <tr>
+                                        <th class="w-no">No</th>
+                                        <th style="width:200px;">Nama Lengkap</th>
+                                        <th style="width:120px;">Nomor KTP/Nopen</th>
+                                        <th>Alamat Sebelumnya</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelBag1"></tbody>
+                            </table>
+                        </div>
+                        <div class="f1-table-section">
+                            <table class="f1-tbl">
+                                <thead>
+                                    <tr>
+                                        <th class="w-no">No</th>
+                                        <th style="width:30px;">JK</th>
+                                        <th style="width:100px;">Tempat Lahir</th>
+                                        <th style="width:60px;">Tgl Lahir</th>
+                                        <th style="width:30px;">Gol Drh</th>
+                                        <th style="width:30px;">Agama</th>
+                                        <th style="width:30px;">Sts Kwn</th>
+                                        <th style="width:30px;">Pkrj</th>
+                                        <th style="width:150px;">Nama Lengkap Ibu</th>
+                                        <th style="width:150px;">Nama Lengkap Ayah</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelBag2"></tbody>
+                            </table>
+                        </div>
+                        <table style="width: 100%; margin-top: 20px; text-align: center;">
+                            <tr>
+                                <td width="30%">Nama Ketua RT</td>
+                                <td width="40%"></td>
+                                <td width="30%">Kepala Keluarga</td>
+                            </tr>
+                            <tr>
+                                <td height="30"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="border-bottom:1px solid black;">.....................................</td>
+                                <td></td>
+                                <td style="border-bottom:1px solid black;" id="f1TtdKK"></td>
+                            </tr>
+                            <tr>
+                                <td>Nama Ketua RW</td>
+                                <td>Mengetahui,<br>Kepala Desa/Lurah</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td height="30"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="border-bottom:1px solid black;">.....................................</td>
+                                <td style="border-bottom:1px solid black;"><b>H. MISNUN, SH.</b></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div id="layout-surat" class="surat-layout">
+                        <div class="kop-surat">
+                            <img src="assets/logo.png">
+                            <h3>PEMERINTAH KABUPATEN LOMBOK TIMUR</h3>
+                            <h3>KECAMATAN WANASABA</h3>
+                            <h2>DESA WANASABA</h2>
+                            <p>Jln. Labuhan Lombok Km. 59 Desa Wanasaba Kec. Wanasaba Lombok Timur NTB Telp. (0376) 2991294</p>
+                        </div>
+
+                        <div id="isi-surat-dinamis">
+                        </div>
+
+                        <div class="ttd-area">
+                            <p>Wanasaba, <span id="tanggalHariIni">...</span></p>
+                            <p>Kepala Desa Wanasaba</p>
+                            <div style="height: 80px;"></div>
+                            <u style="font-weight: bold;" id="out_ttd">H. MISNUN, SH.</u>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. LOGIKA NAVIGASI & UI ---
+        function switchView(viewName) {
+            const pInput = document.getElementById('panelInput');
+            const pPreview = document.getElementById('panelPreview');
+            const nInput = document.getElementById('navInput');
+            const nPreview = document.getElementById('navPreview');
+            if (viewName === 'input') {
+                pInput.classList.remove('hidden-view');
+                pInput.classList.add('active-view');
+                pPreview.classList.remove('active-view');
+                pPreview.classList.add('hidden-view');
+                nInput.classList.add('active');
+                nPreview.classList.remove('active');
+            } else {
+                pInput.classList.remove('active-view');
+                pInput.classList.add('hidden-view');
+                pPreview.classList.remove('hidden-view');
+                pPreview.classList.add('active-view');
+                nInput.classList.remove('active');
+                nPreview.classList.add('active');
+            }
+        }
+
+        const selJenis = document.getElementById('inputJenis');
+        const formF1 = document.getElementById('form-f1-01');
+        const formBiasa = document.getElementById('form-surat-biasa');
+        const paper = document.getElementById('paperPreview');
+        const btnCetak = document.getElementById('btnCetak');
+
+        function updateLayout() {
+            const jenis = selJenis.value;
+
+            // Reset Tampilan Field
+            document.querySelectorAll('.dynamic-field').forEach(el => el.style.display = 'none');
+
+            if (jenis === 'F-1.01') {
+                formF1.classList.add('active');
+                formBiasa.classList.remove('active');
+                document.getElementById('layout-f1').style.display = 'block';
+                document.getElementById('layout-surat').style.display = 'none';
+                paper.className = 'paper-base size-f4-land';
+                updateZoom(0.8);
+                document.getElementById('zoomSlider').value = 0.8;
+                btnCetak.innerHTML = '🖨️ Cetak F-1.01';
+                renderTabelKeluarga();
+            } else {
+                formF1.classList.remove('active');
+                formBiasa.classList.add('active');
+                document.getElementById('layout-f1').style.display = 'none';
+                document.getElementById('layout-surat').style.display = 'block';
+                paper.className = 'paper-base size-a4';
+                updateZoom(1.0);
+                document.getElementById('zoomSlider').value = 1.0;
+                btnCetak.innerHTML = '🖨️ Cetak Surat';
+
+                // Tampilkan Field Khusus
+                if (jenis === 'harga') document.getElementById('field-harga').style.display = 'block';
+                if (jenis === 'beda_nama') document.getElementById('field-beda_nama').style.display = 'block';
+                if (jenis === 'luar_negeri' || jenis === 'bepergian') document.getElementById('field-tujuan').style.display = 'block';
+                if (jenis === 'anak_kandung' || jenis === 'saudara_kandung') document.getElementById('field-keluarga').style.display = 'block';
+                if (jenis === 'usaha') document.getElementById('field-usaha').style.display = 'block';
+                if (jenis === 'sktm') document.getElementById('field-sktm').style.display = 'block';
+                if (jenis === 'beda_tgl') document.getElementById('field-beda_tgl').style.display = 'block';
+                if (jenis === 'izin_istri') document.getElementById('field-izin_istri').style.display = 'block';
+
+                renderSuratDinamis();
+            }
+        }
+        selJenis.addEventListener('change', updateLayout);
+
+        // --- 2. LOGIKA RENDER SURAT (WORD TEMPLATE REPLICA) ---
+        // Input ID untuk event listener
+        const inputs = [
+            'sb_no', 'sb_nik', 'sb_nama', 'sb_ttl', 'sb_jk', 'sb_agama', 'sb_pekerjaan', 'sb_alamat', 'sb_ttd', 'sb_jabatan',
+            'in_lokasi_tanah', 'in_sertifikat', 'in_luas', 'in_harga', 'in_terbilang',
+            'in_nama_salah', 'in_dokumen',
+            'in_negara', 'in_alasan',
+            'in_ket_hubungan_detail',
+            'in_nama_usaha', 'in_jenis_usaha',
+            'in_sktm_tujuan', 'in_sktm_nama_anak',
+            'in_bt_dokumen', 'in_bt_nomor', 'in_bt_penerbit', 'in_bt_tertulis', 'in_bt_benar',
+            'in_nama_suami', 'in_ttl_suami', 'in_pekerjaan_suami', 'in_alamat_suami',
+            'in_perusahaan', 'in_tujuan_negara', 'in_masa_kontrak'
+        ];
+
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', renderSuratDinamis);
+        });
+        document.getElementById('sb_jk').addEventListener('change', renderSuratDinamis);
+        document.getElementById('sb_agama').addEventListener('change', renderSuratDinamis);
+
+        // Helper untuk mengisi template teks hubungan
+        function setHubungan(tipe) {
+            const ta = document.getElementById('in_ket_hubungan_detail');
+            if (tipe === 'anak') ta.value = "dari Pasangan Suami Istri ... DAN ...";
+            if (tipe === 'saudara') ta.value = "dari ...";
+            renderSuratDinamis();
+        }
+
+        function getVal(id) {
+            return document.getElementById(id).value || '...';
+        }
+
+        function getValUp(id) {
+            return (document.getElementById(id).value || '...').toUpperCase();
+        }
+
+        function renderSuratDinamis() {
+            const jenis = selJenis.value;
+            const container = document.getElementById('isi-surat-dinamis');
+
+            // Data Umum
+            const no = getVal('sb_no');
+            const nama = getValUp('sb_nama');
+            const nik = getVal('sb_nik');
+            const ttl = getVal('sb_ttl');
+            const jk = document.getElementById('sb_jk').value;
+            const agama = document.getElementById('sb_agama').value;
+            const kerja = getVal('sb_pekerjaan');
+            const alamat = getVal('sb_alamat');
+            const jabatan = getVal('sb_jabatan');
+            const ttd = getValUp('sb_ttd');
+            document.getElementById('out_ttd').innerText = ttd;
+
+            let judul = "",
+                isi = "";
+
+            // TABEL BIODATA STANDAR (Tanpa Garis, Rapi)
+            const tabelBio = `
+            <table class="identitas-table">
+                <tr><td width="160">Nama Lengkap</td><td width="20">:</td><td style="font-weight:bold;">${nama}</td></tr>
+                <tr><td>NIK</td><td>:</td><td>${nik}</td></tr>
+                <tr><td>Tempat/Tgl. Lahir</td><td>:</td><td>${ttl}</td></tr>
+                <tr><td>Jenis Kelamin</td><td>:</td><td>${jk}</td></tr>
+                <tr><td>Agama</td><td>:</td><td>${agama}</td></tr>
+                <tr><td>Pekerjaan</td><td>:</td><td>${kerja}</td></tr>
+                <tr><td>Alamat</td><td>:</td><td>${alamat}</td></tr>
+            </table>`;
+
+            // HEADER PEJABAT (Pakai Tabel Biar Rapi)
+            const tablePejabat = `
+            <p style="margin-left: 0px;">Yang bertanda tangan di bawah ini:</p>
+            <table class="identitas-table" style="margin-left: 0px; margin-bottom: 10px;">
+                <tr><td width="160">Nama</td><td width="20">:</td><td style="font-weight:bold;">${ttd}</td></tr>
+                <tr><td style="vertical-align:top;">Jabatan</td><td style="vertical-align:top;">:</td><td>${jabatan}</td></tr>
+            </table>
+        `;
+
+            // --- LOGIKA KONTEN SURAT ---
+
+            if (jenis === 'anak_kandung' || jenis === 'saudara_kandung') {
+                judul = (jenis === 'anak_kandung') ? "SURAT KETERANGAN ANAK KANDUNG" : "SURAT KETERANGAN SAUDARA KANDUNG";
+                const labelHubungan = (jenis === 'anak_kandung') ? "ANAK KANDUNG" : "SAUDARA KANDUNG";
+                const ketHubunganDetail = document.getElementById('in_ket_hubungan_detail').value || "...";
+
+                isi = `
+                ${tablePejabat}
+                <p style="margin-left: 0px;">Menerangkan dengan sebenarnya bahwa :</p>
+                ${tabelBio}
+                <p class="paragraf" style="margin-top: 15px;">Yang namanya tersebut di atas sepanjang sepengetahuan kami memang benar <b>${labelHubungan}</b> dari <b>${ketHubunganDetail}</b>.</p>
+                <p class="paragraf">Demikian Surat Keterangan ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>`;
+            } else if (jenis === 'beda_tgl') {
+                judul = "SURAT KETERANGAN BEDA TANGGAL LAHIR";
+                isi = `
+                <p class="paragraf">Yang bertanda tangan di bawah ini Kepala Desa Wanasaba Kecamatan Wanasaba Kabupaten Lombok Timur, menerangkan dengan sebenarnya bahwa:</p>
+                ${tabelBio}
+                <p class="paragraf">Bahwa namanya tersebut diatas memang benar warga kami dan berdasarkan laporan yang bersangkutan serta tinjauan perbandingan data lain yang diberikan kepada kami, terdapat kesalahan dalam penulisan <b>“Tanggal Lahir”</b> pada <b>${getValUp('in_bt_dokumen')}</b> dengan Nomor <b>${getVal('in_bt_nomor')}</b> yang diterbitkan oleh <b>${getValUp('in_bt_penerbit')}</b>.</p>
+                <p class="paragraf">Adapun data yang dimaksud :</p>
+                <div style="margin-left:40px; margin-bottom:15px;">
+                    <b>Tertulis : ${getVal('in_bt_tertulis')}</b><br>
+                    <b>Sebenarnya : ${getVal('in_bt_benar')}</b>
+                </div>
+                <p class="paragraf">Demikian Surat Keterangan ini kami buat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>`;
+            } else if (jenis === 'sktm') {
+                judul = "SURAT KETERANGAN TIDAK MAMPU";
+                let tambahanAnak = document.getElementById('in_sktm_nama_anak').value ? `Atas Nama Anak/Pasien: <b>${getValUp('in_sktm_nama_anak')}</b>` : "";
+                isi = `
+                <p>Yang bertanda tangan di bawah ini Kepala Desa Wanasaba menerangkan dengan sebenarnya kepada:</p>
+                ${tabelBio}
+                <p class="paragraf">Berdasarkan sepengetahuan kami dan data yang ada, bahwa yang bersangkutan adalah benar warga Desa Wanasaba yang tergolong keluarga <b>KURANG MAMPU / TIDAK MAMPU</b>.</p>
+                <p class="paragraf">Surat Keterangan ini diberikan untuk keperluan: <b>${getValUp('in_sktm_tujuan')}</b>. ${tambahanAnak}</p>
+                <p class="paragraf">Demikian Surat Keterangan ini kami buat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>`;
+            } else if (jenis === 'harga') {
+                judul = "SURAT KETERANGAN HARGA";
+                isi = `
+                <p class="paragraf">Yang bertanda tangan di bawah ini Kepala Desa Wanasaba Kecamatan Wanasaba Kabupaten Lombok Timur, menerangkan dengan sebenarnya bahwa:</p>
+                <p class="paragraf">Tanah (Rumah) milik <b>${nama}</b> yang berlokasi di <b>${getVal('in_lokasi_tanah')}</b> Desa Wanasaba Kecamatan Wanasaba Kabupaten Lombok Timur sesuai Sertifikat Nomor: <b>${getVal('in_sertifikat')}</b> atas nama pemilik dengan luas <b>${getVal('in_luas')} M2</b>.</p>
+                <p class="paragraf">Tanah tersebut diperkirakan dengan harga <b>Rp. ${getVal('in_harga')},-</b> (${getVal('in_terbilang')}).</p>
+                <p class="paragraf">Demikian surat keterangan ini kami buat dengan sebenarnya untuk dapat dipergunakan sebagai mana mestinya.</p>`;
+            } else if (jenis === 'beda_nama') {
+                judul = "SURAT KETERANGAN BEDA NAMA";
+                isi = `
+                <p>Yang bertanda tangan di bawah ini Kepala Desa Wanasaba menerangkan dengan sebenarnya kepada:</p>
+                ${tabelBio}
+                <p class="paragraf">Yang namanya tersebut di atas memang benar warga kami. Bahwa terdapat perbedaan penulisan nama pada dokumen kependudukan dengan dokumen <b>${getVal('in_dokumen')}</b>.</p>
+                <p class="paragraf">Nama yang tertulis Salah: <b>${getValUp('in_nama_salah')}</b><br>Adalah orang yang sama (satu orang) dengan nama: <b>${nama}</b>.</p>
+                <p class="paragraf">Demikian Surat Keterangan ini kami buat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>`;
+            } else if (jenis === 'luar_negeri') {
+                judul = "SURAT KETERANGAN BERADA DI LUAR NEGERI";
+                isi = `
+                <p>Yang bertanda tangan di bawah ini Kepala Desa Wanasaba menerangkan dengan sebenarnya kepada:</p>
+                ${tabelBio}
+                <p class="paragraf">Bahwa yang namanya tersebut di atas berdasarkan laporan dari keluarganya dan data-data pada kami memang benar yang bersangkutan sedang berada di Luar Negeri (<b>${getValUp('in_negara')}</b>).</p>
+                <p class="paragraf">Demikian Surat Keterangan ini kami buat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>`;
+            } else if (jenis === 'belum_nikah') {
+                judul = "SURAT KETERANGAN BELUM NIKAH";
+                isi = `
+                <p>Yang bertanda tangan di bawah ini Kepala Desa Wanasaba menerangkan dengan sebenarnya kepada:</p>
+                ${tabelBio}
+                <p class="paragraf">Dengan ini menyatakan bahwa yang namanya tersebut di atas memang benar <b>BELUM MENIKAH</b> sampai saat ini.</p>
+                <p class="paragraf">Demikian Surat Keterangan ini kami buat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>`;
+            } else if (jenis === 'bepergian') {
+                judul = "SURAT KETERANGAN BEPERGIAN";
+                isi = `
+                <p>Yang bertanda tangan di bawah ini Kepala Desa Wanasaba menerangkan dengan sebenarnya kepada:</p>
+                ${tabelBio}
+                <p class="paragraf">Bahwa yang bersangkutan memang benar akan bepergian ke <b>${getValUp('in_negara')}</b> dengan alasan <b>${getVal('in_alasan')}</b>.</p>
+                <p class="paragraf">Demikian Surat Keterangan ini kami buat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>`;
+            } else if (jenis === 'usaha') {
+                judul = "SURAT KETERANGAN USAHA / HO";
+                isi = `
+                <p>Yang bertanda tangan di bawah ini Kepala Desa Wanasaba menerangkan dengan sebenarnya kepada:</p>
+                ${tabelBio}
+                <p class="paragraf">Bahwa yang bersangkutan benar-benar memiliki usaha <b>${getValUp('in_nama_usaha')}</b> yang bergerak di bidang <b>${getVal('in_jenis_usaha')}</b> yang berlokasi di Desa Wanasaba.</p>
+                <p class="paragraf">Demikian Surat Keterangan ini dibuat untuk kelengkapan administrasi perizinan.</p>`;
+            } else if (jenis === 'izin_istri') {
+                // Data untuk Surat Izin Istri
+                const namaSuami = getValUp('in_nama_suami');
+                const ttlSuami = getVal('in_ttl_suami');
+                const pekerjaanSuami = getVal('in_pekerjaan_suami');
+                const alamatSuami = getVal('in_alamat_suami');
+                const perusahaan = getVal('in_perusahaan');
+                const tujuanNegara = getValUp('in_tujuan_negara');
+                const masaKontrak = getVal('in_masa_kontrak');
+
+                judul = "SURAT PERNYATAAN IZIN ISTRI";
+                isi = `
+                <div style="text-align: center; font-weight: bold; text-decoration: underline; font-size: 14pt; margin-top: 20px;">${judul}</div>
+                <div style="text-align: center; margin-top: 5px; margin-bottom: 20px;">No Reg: ${no}</div>
+                <p>Yang bertanda tangan / cap jempol di bawah ini :</p>
+                <table class="identitas-table">
+                    <tr><td width="160">Nama</td><td width="20">:</td><td style="font-weight:bold;">${nama}</td></tr>
+                    <tr><td>NIK</td><td>:</td><td>${nik}</td></tr>
+                    <tr><td>Tempat/Tgl Lahir</td><td>:</td><td>${ttl}</td></tr>
+                    <tr><td>Kewarganegaraan</td><td>:</td><td>Indonesia</td></tr>
+                    <tr><td>Agama</td><td>:</td><td>${agama}</td></tr>
+                    <tr><td>Pekerjaan</td><td>:</td><td>${kerja}</td></tr>
+                    <tr><td>Alamat</td><td>:</td><td>${alamat}</td></tr>
+                </table>
+                <p style="margin-top: 15px;">Saya selaku <b>Istri</b> dengan ini secara tulus dan ikhlas mengizinkan serta menyetujui <b>Suami</b> saya di bawah ini :</p>
+                <table class="identitas-table">
+                    <tr><td width="160">Nama</td><td width="20">:</td><td style="font-weight:bold;">${namaSuami}</td></tr>
+                    <tr><td>Tempat/Tgl Lahir</td><td>:</td><td>${ttlSuami}</td></tr>
+                    <tr><td>Kewarganegaraan</td><td>:</td><td>Indonesia</td></tr>
+                    <tr><td>Agama</td><td>:</td><td>Islam</td></tr>
+                    <tr><td>Pekerjaan</td><td>:</td><td>${pekerjaanSuami}</td></tr>
+                    <tr><td>Alamat</td><td>:</td><td>${alamatSuami}</td></tr>
+                </table>
+                <p class="paragraf">Untuk melamar Pekerjaan / bekerja ke <b>${tujuanNegara}</b>, melalui <b>${perusahaan}</b> sebagai tenaga kerja Indonesia (TKI) dengan masa Kontrak <b>${masaKontrak}</b>.</p>
+                <p class="paragraf">Segala akibat yang timbul dikemudian hari dari pembuatan dan penggunaan Surat Izin ini sepenuhnya menjadi tanggung jawab saya baik secara Hukum maupun secara moril dan materil tanpa melibatkan pihak lainnya.</p>
+                <p class="paragraf">Demikianlah Surat Keterangan ini saya buat dengan sebenarnya untuk digunakan seperlunya, kepada yang Berwajib / berkepentingan agar menjadi maklum dan tahu adanya.</p>
+                <div style="margin-top: 50px; display: flex; justify-content: space-between;">
+                    <div style="text-align: center; width: 40%;">
+                        <p>Yang Diberi Izin</p>
+                        <div style="height: 60px;"></div>
+                        <u style="font-weight: bold;">${namaSuami}</u>
+                    </div>
+                    <div style="text-align: center; width: 40%;">
+                        <p>Wanasaba, <span id="tanggalHariIni">...</span></p>
+                        <p>Yang Memberi Izin</p>
+                        <div style="height: 60px;"></div>
+                        <u style="font-weight: bold;">${nama}</u>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 50px;">
+                    <p>Mengetahui:</p>
+                    <p>Kepala Desa Wanasaba</p>
+                    <div style="height: 60px;"></div>
+                    <u style="font-weight: bold;">${ttd}</u>
+                </div>`;
+            } else { // Domisili Default
+                judul = document.getElementById('inputJenis').options[document.getElementById('inputJenis').selectedIndex].text.toUpperCase();
+                isi = `
+                <p>Yang bertanda tangan di bawah ini Kepala Desa Wanasaba menerangkan dengan sebenarnya kepada:</p>
+                ${tabelBio}
+                <p class="paragraf">Orang tersebut di atas adalah benar-benar warga/penduduk Desa Wanasaba yang berdomisili di alamat tersebut di atas.</p>
+                <p class="paragraf">Demikian surat keterangan ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>`;
+            }
+
+            container.innerHTML = `<div class="judul-surat">${judul}</div><div class="nomor-surat">Nomor: ${no}</div>${isi}`;
+            // Atur tampilan ttd-area berdasarkan jenis surat
+            const ttdArea = document.querySelector('.ttd-area');
+            if (jenis === 'izin_istri') {
+                ttdArea.style.display = 'none';
+            } else {
+                ttdArea.style.display = 'block';
+            }
+        }
+
+        // --- 3. LOGIKA F-1.01 (HTML RENDER) ---
+        function renderKotak(id, txt) {
+            const c = document.getElementById(id);
+            if (!c) return;
+            c.innerHTML = '';
+            const s = (txt || '').toString().toUpperCase();
+            const r = document.createElement('div');
+            r.className = 'kotak-row';
+            for (let i = 0; i < Math.min(s.length, 30); i++) {
+                const d = document.createElement('div');
+                d.className = 'k-char';
+                d.innerText = s[i];
+                r.appendChild(d);
+            }
+            c.appendChild(r);
+        }
+
+        function formatTglIndo(ymd) {
+            if (!ymd) return '-';
+            const p = ymd.split('-');
+            return `${p[2]}-${p[1]}-${p[0]}`;
+        }
+
+        function renderTabelKeluarga() {
+            renderKotak('boxNamaKK', document.getElementById('f1_nama_kk').value);
+            renderKotak('boxAlamat', document.getElementById('f1_alamat').value);
+            renderKotak('boxRT', document.getElementById('f1_rt').value);
+            renderKotak('boxRW', document.getElementById('f1_rw').value);
+
+            const nm = document.getElementById('f1_nama').value.toUpperCase();
+            const nik = document.getElementById('f1_nik').value;
+            const tgl = formatTglIndo(document.getElementById('f1_tgl_lahir').value);
+
+            document.getElementById('tabelBag1').innerHTML = `<tr><td>1</td><td>${nm}</td><td>${nik}</td><td>-</td></tr>`;
+            document.getElementById('tabelBag2').innerHTML = `<tr><td>1</td><td>${document.getElementById('f1_jk').value}</td><td>${document.getElementById('f1_tmp_lahir').value.toUpperCase()}</td><td>${tgl}</td><td>${document.getElementById('f1_gol').value}</td><td>${document.getElementById('f1_agama').value}</td><td>${document.getElementById('f1_kawin').value}</td><td>${document.getElementById('f1_kerja').value}</td><td>${document.getElementById('f1_ibu').value.toUpperCase()}</td><td>${document.getElementById('f1_ayah').value.toUpperCase()}</td></tr>`;
+            document.getElementById('f1TtdKK').innerText = document.getElementById('f1_nama_kk').value.toUpperCase();
+        }
+        document.querySelectorAll('#form-f1-01 input').forEach(el => el.addEventListener('input', renderTabelKeluarga));
+
+        // --- 4. FUNGSI HANDLE DOWNLOAD/PRINT ---
+        function handlePrint() {
+            window.print();
+        }
+
+        function updateZoom(val) {
+            document.getElementById('paperPreview').style.transform = `scale(${val})`;
+        }
+        document.getElementById('tanggalHariIni').innerText = new Date().toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+
+        // INIT
+        updateLayout();
+        if (window.innerWidth <= 768) switchView('input');
+    </script>
+</body>
+
+</html>
