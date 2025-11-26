@@ -347,6 +347,34 @@
             page-break-inside: avoid;
         }
         
+        .ttd-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            width: 100%;
+        }
+        
+        .ttd-box {
+            width: 48%;
+            text-align: center;
+        }
+        
+        .ttd-box p {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .ttd-space {
+            height: 60px;
+            margin: 10px 0;
+        }
+        
+        .ttd-name {
+            font-weight: bold;
+            text-decoration: underline;
+            margin-top: 10px;
+        }
+        
         .paragraf {
             text-align: justify;
             text-indent: 40px;
@@ -1112,11 +1140,11 @@
                 const tujuanNegara = getValUp('in_tujuan_negara');
                 const masaKontrak = getVal('in_masa_kontrak');
 
-                judul = "SURAT PERNYATAAN IZIN ISTRI";
+                // judul = "SURAT PERNYATAAN IZIN ISTRI";
                 isi = `
-                <div style="text-align: center; font-weight: bold; text-decoration: underline; font-size: 14pt; margin-top: 20px;">${judul}</div>
-                <div style="text-align: center; margin-top: 5px; margin-bottom: 20px;">No Reg: ${no}</div>
-                <p>Yang bertanda tangan / cap jempol di bawah ini :</p>
+                <div style="text-align: center; font-weight: bold; text-decoration: underline; font-size: 14pt; margin-top: 20px;">SURAT PERNYATAAN IZIN ISTRI</div>
+    <div style="text-align: center; margin-top: 5px; margin-bottom: 20px;">No Reg: ${no}</div>
+    <p>Yang bertanda tangan / cap jempol di bawah ini :</p>
                 <table class="identitas-table">
                     <tr><td width="160">Nama</td><td width="20">:</td><td style="font-weight:bold;">${nama}</td></tr>
                     <tr><td>NIK</td><td>:</td><td>${nik}</td></tr>
@@ -1138,17 +1166,19 @@
                 <p class="paragraf">Untuk melamar Pekerjaan / bekerja ke <b>${tujuanNegara}</b>, melalui <b>${perusahaan}</b> sebagai tenaga kerja Indonesia (TKI) dengan masa Kontrak <b>${masaKontrak}</b>.</p>
                 <p class="paragraf">Segala akibat yang timbul dikemudian hari dari pembuatan dan penggunaan Surat Izin ini sepenuhnya menjadi tanggung jawab saya baik secara Hukum maupun secara moril dan materil tanpa melibatkan pihak lainnya.</p>
                 <p class="paragraf">Demikianlah Surat Keterangan ini saya buat dengan sebenarnya untuk digunakan seperlunya, kepada yang Berwajib / berkepentingan agar menjadi maklum dan tahu adanya.</p>
-                <div style="margin-top: 50px; display: flex; justify-content: space-between;">
-                    <div style="text-align: center; width: 40%;">
+                
+                <!-- PERBAIKAN: Tata letak tanda tangan yang lebih rapi -->
+                <div class="ttd-container">
+                    <div class="ttd-box" style="padding-top:42px">
                         <p>Yang Diberi Izin</p>
-                        <div style="height: 60px;"></div>
-                        <u style="font-weight: bold;">${namaSuami}</u>
+                        <div class="ttd-space"></div>
+                        <div class="ttd-name">${namaSuami}</div>
                     </div>
-                    <div style="text-align: center; width: 40%;">
-                        <p>Wanasaba, <span id="tanggalHariIni">...</span></p>
+                    <div class="ttd-box">
+                        <p>Wanasaba, <span id="tanggalHariIni2">${new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})}</span></p>
                         <p>Yang Memberi Izin</p>
-                        <div style="height: 60px;"></div>
-                        <u style="font-weight: bold;">${nama}</u>
+                        <div class="ttd-space"></div>
+                        <div class="ttd-name">${nama}</div>
                     </div>
                 </div>
                 <div style="text-align: center; margin-top: 50px;">
@@ -1167,14 +1197,18 @@
             }
 
             container.innerHTML = `<div class="judul-surat">${judul}</div><div class="nomor-surat">Nomor: ${no}</div>${isi}`;
+
             // Atur tampilan ttd-area berdasarkan jenis surat
             const ttdArea = document.querySelector('.ttd-area');
             if (jenis === 'izin_istri') {
+                container.innerHTML = isi; // Hanya tampilkan isi tanpa judul tambahan
                 ttdArea.style.display = 'none';
             } else {
+                container.innerHTML = `<div class="judul-surat">${judul}</div><div class="nomor-surat">Nomor: ${no}</div>${isi}`;
                 ttdArea.style.display = 'block';
             }
         }
+
 
         // --- 3. LOGIKA F-1.01 (HTML RENDER) ---
         function renderKotak(id, txt) {
