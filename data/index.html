@@ -598,6 +598,7 @@
                         <option value="usaha">Izin Usaha / HO</option>
                         <option value="domisili">Ket. Domisili (Umum)</option>
                         <option value="izin_istri">Surat Izin Istri</option>
+                        <option value="miskin">Ket. Miskin</option> <!-- TAMBAH INI -->
                     </optgroup>
                 </select>
                 </div>
@@ -683,6 +684,11 @@
                         <input type="text" id="in_perusahaan" class="form-control mb-1" placeholder="Nama Perusahaan (PT)">
                         <input type="text" id="in_tujuan_negara" class="form-control mb-1" placeholder="Negara Tujuan">
                         <input type="text" id="in_masa_kontrak" class="form-control" placeholder="Masa Kontrak (Contoh: 2 Tahun)">
+                    </div>
+                    <div id="field-miskin" class="dynamic-field">
+                        <label class="text-danger fw-bold mb-1">🏚️ Data Keterangan Miskin</label>
+                        <input type="text" id="in_tujuan_bantuan" class="form-control mb-1" placeholder="Tujuan Bantuan (Cth: Pembiayaan Kesehatan)">
+                        <input type="text" id="in_status_bdt" class="form-control" placeholder="Status BDT (Cth: Belum masuk BDT)">
                     </div>
 
                     <div class="mb-2 border-top pt-2"><label>Pejabat Penanda Tangan</label><input type="text" id="sb_ttd" class="form-control" value="H. MISNUN, SH."></div>
@@ -968,6 +974,7 @@
                 if (jenis === 'sktm') document.getElementById('field-sktm').style.display = 'block';
                 if (jenis === 'beda_tgl') document.getElementById('field-beda_tgl').style.display = 'block';
                 if (jenis === 'izin_istri') document.getElementById('field-izin_istri').style.display = 'block';
+                if (jenis === 'miskin') document.getElementById('field-miskin').style.display = 'block'; // TAMBAH INI
 
                 renderSuratDinamis();
             }
@@ -986,7 +993,8 @@
             'in_sktm_tujuan', 'in_sktm_nama_anak',
             'in_bt_dokumen', 'in_bt_nomor', 'in_bt_penerbit', 'in_bt_tertulis', 'in_bt_benar',
             'in_nama_suami', 'in_ttl_suami', 'in_pekerjaan_suami', 'in_alamat_suami',
-            'in_perusahaan', 'in_tujuan_negara', 'in_masa_kontrak'
+            'in_perusahaan', 'in_tujuan_negara', 'in_masa_kontrak',
+            'in_tujuan_bantuan', 'in_status_bdt' // TAMBAH INI
         ];
 
         inputs.forEach(id => {
@@ -1187,6 +1195,17 @@
                     <div style="height: 60px;"></div>
                     <u style="font-weight: bold;">${ttd}</u>
                 </div>`;
+            } else if (jenis === 'miskin') {
+                judul = "SURAT KETERANGAN MISKIN";
+                const tujuanBantuan = getVal('in_tujuan_bantuan');
+                const statusBDT = getVal('in_status_bdt');
+
+                isi = `
+        ${tablePejabat}
+        <p style="margin-left: 0px;">Menerangkan sebenarnya kepada :</p>
+        ${tabelBio}
+        <p class="paragraf" style="margin-top: 15px;">Bahwa yang bersangkutan tersebut, adalah memang betul tergolong masyarakat miskin/tidak mampu dan layak untuk mendapat bantuan ${tujuanBantuan}, ${statusBDT}.</p>
+        <p class="paragraf">Demikian pernyataan ini Kami buat dengan sebenarnya, dan apabila terdapat kesalahan yang menyebabkan kerugian Negara atas pernyataan ini, maka Kami bertanggung jawab secara hukum.</p>`;
             } else { // Domisili Default
                 judul = document.getElementById('inputJenis').options[document.getElementById('inputJenis').selectedIndex].text.toUpperCase();
                 isi = `
