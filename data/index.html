@@ -599,6 +599,10 @@
                         <option value="domisili">Ket. Domisili (Umum)</option>
                         <option value="izin_istri">Surat Izin Istri</option>
                         <option value="miskin">Ket. Miskin</option> <!-- TAMBAH INI -->
+                        <option value="kepemilikan">Ket. Kepemilikan Kendaraan</option> <!-- TAMBAH INI -->
+                        <option value="skck">SKCK (Surat Keterangan Catatan Kepolisian)</option> <!-- TAMBAH INI -->
+                        <option value="domisili_lembaga">Domisili Lembaga / Organisasi</option> <!-- TAMBAH INI -->
+                        <option value="perbaikan_akte">Perbaikan Akte</option>
                     </optgroup>
                 </select>
                 </div>
@@ -643,6 +647,12 @@
                         <label style="font-size:0.7rem; color:#666;">Data Sebenarnya (Benar):</label>
                         <input type="text" id="in_bt_benar" class="form-control" placeholder="Cth: Wanasaba, 10 Juni 1984">
                     </div>
+                    <!-- Tambahkan field dinamis di dalam form-surat-biasa -->
+                    <div id="field-perbaikan_akte" class="dynamic-field">
+                        <label class="text-primary fw-bold mb-1">📝 Poin-Poin Perbaikan</label>
+                        <label style="font-size:0.7rem; color:#666;">Masukkan poin-poin perbaikan (setiap baris akan menjadi poin terpisah)</label>
+                        <textarea id="in_perbaikan_akte" class="form-control" rows="5" placeholder="Contoh:&#10;1. Nama yang tercantum dalam akte kelahiran adalah ...&#10;2. Tempat dan tanggal lahir yang tercantum ..."></textarea>
+                    </div>
 
                     <div id="field-tujuan" class="dynamic-field">
                         <label class="text-success fw-bold mb-1">✈️ Tujuan</label>
@@ -671,7 +681,45 @@
                         <input type="text" id="in_sktm_tujuan" class="form-control mb-1" placeholder="Keperluan (Cth: Biaya Sekolah)">
                         <input type="text" id="in_sktm_nama_anak" class="form-control" placeholder="Nama Anak/Pasien (Jika ada)">
                     </div>
-
+                    <!-- Tambahkan di dalam form-surat-biasa, setelah field-kepemilikan -->
+                    <div id="field-skck" class="dynamic-field">
+                        <label class="text-primary fw-bold mb-1">📋 Data SKCK</label>
+                        <input type="text" id="in_skck_keperluan" class="form-control mb-1" placeholder="Keperluan (Cth: Calon Kepala Sekolah)">
+                        <input type="text" id="in_skck_pendidikan" class="form-control mb-1" placeholder="Pendidikan Terakhir">
+                        <select id="in_skck_status_kawin" class="form-select">
+        <option value="Kawin">Kawin</option>
+        <option value="Belum Kawin">Belum Kawin</option>
+        <option value="Cerai Hidup">Cerai Hidup</option>
+        <option value="Cerai Mati">Cerai Mati</option>
+    </select>
+                    </div>
+                    <!-- Tambahkan di dalam form-surat-biasa, setelah field-skck -->
+                    <div id="field-domisili_lembaga" class="dynamic-field">
+                        <label class="text-primary fw-bold mb-1">🏢 Data Lembaga</label>
+                        <input type="text" id="in_nama_lembaga" class="form-control mb-1" placeholder="Nama Lembaga/Organisasi">
+                        <textarea id="in_alamat_lembaga" class="form-control mb-1" placeholder="Alamat Lembaga (Contoh: Dusun Terutuk Desa Wanasaba)" rows="2"></textarea>
+                        <input type="text" id="in_dusun_lembaga" class="form-control mb-1" placeholder="Dusun Lokasi Lembaga (Contoh: Terutuk)">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label>Nama Sekdes</label>
+                                <input type="text" id="in_nama_sekdes" class="form-control" placeholder="Nama Sekretaris Desa" value="SAHARUDIN,S.STP.MM">
+                            </div>
+                            <div class="col-6">
+                                <label>NIP Sekdes</label>
+                                <input type="text" id="in_nip_sekdes" class="form-control" placeholder="NIP Sekretaris Desa" value="198106072000121001">
+                            </div>
+                        </div>
+                        <div class="row g-2 mt-1">
+                            <div class="col-6">
+                                <label>Nama Kepala Desa</label>
+                                <input type="text" id="in_nama_kades" class="form-control" placeholder="Nama Kepala Desa" value="LALU TAUFIKURRAHMAN">
+                            </div>
+                            <div class="col-6">
+                                <label>Nama Camat</label>
+                                <input type="text" id="in_nama_camat" class="form-control" placeholder="Nama Camat">
+                            </div>
+                        </div>
+                    </div>
                     <!-- Field untuk Surat Izin Istri -->
                     <div id="field-izin_istri" class="dynamic-field">
                         <label class="text-primary fw-bold mb-1">👰 Data Suami</label>
@@ -685,12 +733,24 @@
                         <input type="text" id="in_tujuan_negara" class="form-control mb-1" placeholder="Negara Tujuan">
                         <input type="text" id="in_masa_kontrak" class="form-control" placeholder="Masa Kontrak (Contoh: 2 Tahun)">
                     </div>
+                    <!-- Data keterangan Miskin -->
                     <div id="field-miskin" class="dynamic-field">
                         <label class="text-danger fw-bold mb-1">🏚️ Data Keterangan Miskin</label>
                         <input type="text" id="in_tujuan_bantuan" class="form-control mb-1" placeholder="Tujuan Bantuan (Cth: Pembiayaan Kesehatan)">
                         <input type="text" id="in_status_bdt" class="form-control" placeholder="Status BDT (Cth: Belum masuk BDT)">
                     </div>
-
+                    <!-- Surat keterangan Kepemilikan -->
+                    <div id="field-kepemilikan" class="dynamic-field">
+                        <label class="text-primary fw-bold mb-1">🚗 Data Kendaraan</label>
+                        <input type="text" id="in_nama_pemilik" class="form-control mb-1" placeholder="Nama Pemilik">
+                        <input type="text" id="in_nopol_bpkb" class="form-control mb-1" placeholder="Nopol/BPKB">
+                        <input type="text" id="in_nomor_rangka_mesin" class="form-control mb-1" placeholder="Nomor Rangka/Mesin">
+                        <input type="text" id="in_merek_type" class="form-control mb-1" placeholder="Merek/Type">
+                        <input type="text" id="in_warna" class="form-control mb-1" placeholder="Warna">
+                        <input type="text" id="in_tahun_pembuatan" class="form-control mb-1" placeholder="Tahun Pembuatan/Rakit">
+                        <input type="text" id="in_isi_silinder" class="form-control mb-1" placeholder="Isi Silinder">
+                        <input type="text" id="in_jumlah_roda_bahan_bakar" class="form-control" placeholder="Jumlah Roda/Bahan Bakar">
+                    </div>
                     <div class="mb-2 border-top pt-2"><label>Pejabat Penanda Tangan</label><input type="text" id="sb_ttd" class="form-control" value="H. MISNUN, SH."></div>
                     <div class="mb-2"><label>Jabatan Penanda Tangan</label><input type="text" id="sb_jabatan" class="form-control" value="Kepala Desa Wanasaba Kecamatan Wanasaba Kabupaten Lombok Timur Nusa Tenggara Barat."></div>
                 </div>
@@ -975,6 +1035,10 @@
                 if (jenis === 'beda_tgl') document.getElementById('field-beda_tgl').style.display = 'block';
                 if (jenis === 'izin_istri') document.getElementById('field-izin_istri').style.display = 'block';
                 if (jenis === 'miskin') document.getElementById('field-miskin').style.display = 'block'; // TAMBAH INI
+                if (jenis === 'kepemilikan') document.getElementById('field-kepemilikan').style.display = 'block'; // TAMBAH INI
+                if (jenis === 'skck') document.getElementById('field-skck').style.display = 'block'; // TAMBAH INI
+                if (jenis === 'domisili_lembaga') document.getElementById('field-domisili_lembaga').style.display = 'block'; // TAMBAH INI
+                if (jenis === 'perbaikan_akte') document.getElementById('field-perbaikan_akte').style.display = 'block';
 
                 renderSuratDinamis();
             }
@@ -994,7 +1058,12 @@
             'in_bt_dokumen', 'in_bt_nomor', 'in_bt_penerbit', 'in_bt_tertulis', 'in_bt_benar',
             'in_nama_suami', 'in_ttl_suami', 'in_pekerjaan_suami', 'in_alamat_suami',
             'in_perusahaan', 'in_tujuan_negara', 'in_masa_kontrak',
-            'in_tujuan_bantuan', 'in_status_bdt' // TAMBAH INI
+            'in_tujuan_bantuan', 'in_status_bdt', // TAMBAH INI
+            'in_nama_pemilik', 'in_nopol_bpkb', 'in_nomor_rangka_mesin', 'in_merek_type',
+            'in_warna', 'in_tahun_pembuatan', 'in_isi_silinder', 'in_jumlah_roda_bahan_bakar', // TAMBAH INI
+            'in_skck_keperluan', 'in_skck_pendidikan', 'in_skck_status_kawin', // TAMBAH INI
+            'in_nama_lembaga', 'in_alamat_lembaga', 'in_dusun_lembaga', 'in_nama_sekdes', 'in_nip_sekdes', 'in_nama_kades', 'in_nama_camat', // TAMBAH INI,
+            'in_perbaikan_akte'
         ];
 
         inputs.forEach(id => {
@@ -1003,6 +1072,10 @@
         });
         document.getElementById('sb_jk').addEventListener('change', renderSuratDinamis);
         document.getElementById('sb_agama').addEventListener('change', renderSuratDinamis);
+        // Tambahkan di bagian event listeners
+        document.getElementById('in_skck_keperluan').addEventListener('input', renderSuratDinamis);
+        document.getElementById('in_skck_pendidikan').addEventListener('input', renderSuratDinamis);
+        document.getElementById('in_skck_status_kawin').addEventListener('change', renderSuratDinamis);
 
         // Helper untuk mengisi template teks hubungan
         function setHubungan(tipe) {
@@ -1086,6 +1159,27 @@
                     <b>Sebenarnya : ${getVal('in_bt_benar')}</b>
                 </div>
                 <p class="paragraf">Demikian Surat Keterangan ini kami buat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>`;
+            } else if (jenis === 'perbaikan_akte') {
+                judul = "SURAT KETERANGAN";
+
+                // Mengambil poin-poin perbaikan dari textarea
+                const poinText = document.getElementById('in_perbaikan_akte').value;
+                let poinList = '';
+
+                if (poinText) {
+                    const points = poinText.split('\n').filter(p => p.trim() !== '');
+                    poinList = points.map(p => `<p style="margin-left: 40px; text-align: justify; margin-bottom: 5px;">${p.trim()}</p>`).join('');
+                } else {
+                    poinList = '<p style="margin-left: 40px; text-align: justify; margin-bottom: 5px;">1. ...</p>';
+                }
+
+                isi = `
+    ${tablePejabat}
+    <p style="margin-left: 0px;">Menerangkan dengan sebenarnya kepada :</p>
+    ${tabelBio}
+    <p class="paragraf" style="margin-top: 15px;">Yang namanya tersebut diatas sepanjang sepengetahuan kami memang benar:</p>
+    ${poinList}
+    <p class="paragraf" style="margin-top: 15px;">Demikian surat keterangan ini kami buat dengan sebenarnya untuk dapat dipergunakan sebagai mana mestinya.</p>`;
             } else if (jenis === 'sktm') {
                 judul = "SURAT KETERANGAN TIDAK MAMPU";
                 let tambahanAnak = document.getElementById('in_sktm_nama_anak').value ? `Atas Nama Anak/Pasien: <b>${getValUp('in_sktm_nama_anak')}</b>` : "";
@@ -1195,6 +1289,41 @@
                     <div style="height: 60px;"></div>
                     <u style="font-weight: bold;">${ttd}</u>
                 </div>`;
+            } // --- CASE BARU UNTUK SKCK ---
+            else if (jenis === 'skck') {
+                judul = "SURAT KETERANGAN CATATAN KEPOLISIAN";
+                const pendidikan = getVal('in_skck_pendidikan');
+                const statusKawin = getVal('in_skck_status_kawin');
+                const keperluan = getVal('in_skck_keperluan');
+
+                // Tabel Biodata Lengkap untuk SKCK
+                const tabelSKCK = `
+        <table class="identitas-table">
+            <tr><td width="160">Nama</td><td width="20">:</td><td style="font-weight:bold;">${nama}</td></tr>
+            <tr><td>Tempat /Tgl Lahir</td><td>:</td><td>${ttl}</td></tr>
+            <tr><td>Jenis Kelamin</td><td>:</td><td>${jk}</td></tr>
+            <tr><td>Status Perkawinan</td><td>:</td><td>${statusKawin}</td></tr>
+            <tr><td>Pekerjaan</td><td>:</td><td>${kerja}</td></tr>
+            <tr><td>Pendidikan Terakhir</td><td>:</td><td>${pendidikan}</td></tr>
+            <tr><td>Alamat/ Tempat Tinggal</td><td>:</td><td>${alamat}</td></tr>
+            <tr><td>Agama</td><td>:</td><td>${agama}</td></tr>
+            <tr><td>Nomor KTP</td><td>:</td><td>${nik}</td></tr>
+        </table>`;
+
+                isi = `
+        ${tablePejabat}
+        <p style="margin-left: 0px;">Menerangkan dengan sebenarnya bahwa :</p>
+        ${tabelSKCK}
+        <p class="paragraf" style="margin-top: 15px;">Berdasarkan data dan catatan yang ada serta sepanjang pengetahuan kami orang tersebut:</p>
+        <ol style="text-align: justify; margin-left: 20px;">
+            <li>Penduduk/Warga Desa Wanasaba Kecamatan Wanasaba.</li>
+            <li>Berkelakuan baik di dalam kehidupan bermasyarakat.</li>
+            <li>Tidak tersangkut perkara kriminalitas dengan instansi kepolisian.</li>
+            <li>Tidak dalam status tahanan yang berwajib.</li>
+            <li>Tidak terlibat dengan penggunaan obat-obat terlarang.</li>
+            <li>Surat keterangan ini dikeluarkan untuk keperluan <b>${keperluan}</b>.</li>
+        </ol>
+        <p class="paragraf">Demikian surat keterangan ini kami buat dengan sebenarnya untuk dapat dipergunakan dimana mestinya.</p>`;
             } else if (jenis === 'miskin') {
                 judul = "SURAT KETERANGAN MISKIN";
                 const tujuanBantuan = getVal('in_tujuan_bantuan');
@@ -1206,6 +1335,73 @@
         ${tabelBio}
         <p class="paragraf" style="margin-top: 15px;">Bahwa yang bersangkutan tersebut, adalah memang betul tergolong masyarakat miskin/tidak mampu dan layak untuk mendapat bantuan ${tujuanBantuan}, ${statusBDT}.</p>
         <p class="paragraf">Demikian pernyataan ini Kami buat dengan sebenarnya, dan apabila terdapat kesalahan yang menyebabkan kerugian Negara atas pernyataan ini, maka Kami bertanggung jawab secara hukum.</p>`;
+            } else if (jenis === 'kepemilikan') {
+                judul = "SURAT KETERANGAN KEPEMILIKAN";
+                const namaPemilik = getValUp('in_nama_pemilik');
+                const nopolBpkb = getVal('in_nopol_bpkb');
+                const nomorRangkaMesin = getVal('in_nomor_rangka_mesin');
+                const merekType = getVal('in_merek_type');
+                const warna = getVal('in_warna');
+                const tahunPembuatan = getVal('in_tahun_pembuatan');
+                const isiSilinder = getVal('in_isi_silinder');
+                const jumlahRodaBahanBakar = getVal('in_jumlah_roda_bahan_bakar');
+
+                isi = `
+    <p class="paragraf">Yang bertanda tangan dibawah ini Kepala Desa Wanasaba Kecamatan Wanasaba Kabupaten Lombok Timur, menerangkan dengan sebenarnya bahwa BPKB ( Bukti Pemilikan Kendaraan Bermotor ) dengan ciri-ciri sebagai berikut:</p>
+    
+    <table class="identitas-table" style="margin-left: 20px; margin-bottom: 15px;">
+        <tr><td width="200">Nama Pemilik</td><td width="20">:</td><td><b>${namaPemilik}</b></td></tr>
+        <tr><td>Nopol/BPKB</td><td>:</td><td><b>${nopolBpkb}</b></td></tr>
+        <tr><td>Nomor Rangka/Mesin</td><td>:</td><td><b>${nomorRangkaMesin}</b></td></tr>
+        <tr><td>Merek/Type</td><td>:</td><td><b>${merekType}</b></td></tr>
+        <tr><td>Warna</td><td>:</td><td><b>${warna}</b></td></tr>
+        <tr><td>Tahun Pembuatan/Rakit</td><td>:</td><td><b>${tahunPembuatan}</b></td></tr>
+        <tr><td>Isi Silinder</td><td>:</td><td><b>${isiSilinder}</b></td></tr>
+        <tr><td>Jumlah Roda/Bahan Bakar</td><td>:</td><td><b>${jumlahRodaBahanBakar}</b></td></tr>
+    </table>
+
+    <p class="paragraf">Sepanjang Pengetahuan kami bahwa BPKB ( Bukti Pemilikan Kendaraan Bermotor) tersebut diatas merupakan milik dari <b>"${namaPemilik}"</b> dengan alamat <b>${getVal('sb_alamat')}</b>.</p>
+    <p class="paragraf">Demikian surat keterangan ini kami buat dengan sebenarnya untuk dapat dipergunakan sebagai mana mestinya.</p>`;
+            } else if (jenis === 'domisili_lembaga') {
+                judul = "SURAT KETERANGAN DOMISILI";
+                const namaLembaga = getValUp('in_nama_lembaga');
+                const alamatLembaga = getVal('in_alamat_lembaga');
+                const dusunLembaga = getVal('in_dusun_lembaga');
+                const namaSekdes = getVal('in_nama_sekdes');
+                const nipSekdes = getVal('in_nip_sekdes');
+                const namaKades = getVal('in_nama_kades');
+                const namaCamat = getVal('in_nama_camat');
+
+                isi = `
+        <p class="paragraf">Yang bertanda tangan di bawah ini <b>Sekretaris Desa Wanasaba Kecamatan Wanasaba Kabupaten Lombok Timur</b>. Menerangkan dengan sebenarnya kepada :</p>
+        
+        <table class="identitas-table">
+            <tr><td width="160">Nama Lembaga</td><td width="20">:</td><td style="font-weight:bold;">${namaLembaga}</td></tr>
+            <tr><td style="vertical-align:top;">Alamat</td><td style="vertical-align:top;">:</td><td>${alamatLembaga}</td></tr>
+        </table>
+
+        <p class="paragraf">Lembaga <b>${namaLembaga}</b> tersebut memang benar berlokasi di Dusun ${dusunLembaga} Desa Wanasaba Kecamatan Wanasaba Kabupaten Lombok Timur.</p>
+        <p class="paragraf">Demikian Surat Keterangan ini kami buat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>
+
+        <!-- Tanda Tangan menggunakan Table -->
+        <table style="width: 100%; margin-top: 80px; border-collapse: collapse;">
+            <tr>
+                <td style="width: 50%; text-align: center;">
+                    <p style="position:relative; left:50%;">Mengetahui:</p>
+                    <p style="visibility:hidden;">lddal</p>
+                    <p>Camat Wanasaba</p>
+                    <div style="height: 60px; margin: 10px 0;"></div>
+                    <u style="font-weight: bold;">${namaSekdes}</u>
+                    <p>NIP. ${nipSekdes}</p>
+                </td>
+                <td style="width: 50%; text-align: center;">
+                    <p>&nbsp;</p>
+                    <p>Kepala Desa Wanasaba</p>
+                    <div style="height: 60px; margin: 10px 0;"></div>
+                    <u style="font-weight: bold;">${namaKades}</u>
+                </td>
+            </tr>
+        </table>`;
             } else { // Domisili Default
                 judul = document.getElementById('inputJenis').options[document.getElementById('inputJenis').selectedIndex].text.toUpperCase();
                 isi = `
@@ -1218,9 +1414,10 @@
             container.innerHTML = `<div class="judul-surat">${judul}</div><div class="nomor-surat">Nomor: ${no}</div>${isi}`;
 
             // Atur tampilan ttd-area berdasarkan jenis surat
+            // const ttdArea = document.querySelector('.ttd-area');
             const ttdArea = document.querySelector('.ttd-area');
-            if (jenis === 'izin_istri') {
-                container.innerHTML = isi; // Hanya tampilkan isi tanpa judul tambahan
+            if (jenis === 'izin_istri' || jenis === 'domisili_lembaga') {
+                container.innerHTML = `<div class="judul-surat">${judul}</div><div class="nomor-surat">Nomor: ${no}</div>${isi}`;
                 ttdArea.style.display = 'none';
             } else {
                 container.innerHTML = `<div class="judul-surat">${judul}</div><div class="nomor-surat">Nomor: ${no}</div>${isi}`;
